@@ -30,6 +30,8 @@ function Navbar() {
           </NavLink>
         </ul>
         <div className='flex item-center gap-4'>
+          <img onClick={()=>setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
+
           {
             token ?
             <div className='flex item-center gap-2 cursor-pointer group relative'>
@@ -45,6 +47,21 @@ function Navbar() {
             </div>
             :<button onClick={()=>navigate('/login')} className='bg-primary text-white px-8 py-3 rounded-full font-light hidden md:block'>Create account</button>
           }
+          
+
+          {/* mobile user... */}
+          <div className={`${showMenu?'fixed w-full' : 'h-0 w-0'} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
+            <div className='flex item-center justify-between px-5 py-6'> 
+              <img className='w-36' src={assets.logo} alt="" />
+              <img className='w-8' onClick={()=>setShowMenu(false)} src={assets.cross_icon} alt="" />
+            </div>
+            <ul className='flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium'>
+              <NavLink onClick={()=>setShowMenu(false)} to='/'><p className='px-4 py-2 rounded inline-block'>Home</p></NavLink>
+              <NavLink onClick={()=>setShowMenu(false)} to='/doctors'><p className='px-4 py-2 rounded inline-block'>All Doctors</p></NavLink>
+              <NavLink onClick={()=>setShowMenu(false)} to='/about'><p className='px-4 py-2 rounded inline-block'>About</p></NavLink>
+              <NavLink onClick={()=>setShowMenu(false)} to='/contact'><p className='px-4 py-2 rounded inline-block'>Contact</p></NavLink>
+            </ul>
+          </div>
         </div>
     </div>
   )
