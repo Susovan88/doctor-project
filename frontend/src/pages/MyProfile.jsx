@@ -1,25 +1,90 @@
 import React, { useReducer } from 'react'
-import { assets } from '../assets/assets_frontend/assets';
-import { useState } from 'react';
+import { assets } from '../assets/assets_frontend/assets.js';
+import { useState,useEffect } from 'react';
+import { UseUserContext } from '../context/UserContext';
+import {toast} from "react-toastify";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useParams } from "react-router-dom";
 
 function MyProfile() {
-  const [userData,setUserdata]=useState({
-    name:'Susova Paul',
-    image:assets.profile_pic,
-    email:"palsusovan88@gmail.com",
-    phone:'+91 89107 60697',
-    address:{
-      line1:"Deulpur, Howrah",
-      line2:"Kolkata Garia"
-    },
-    gender:'Male',
-    dob:'2004-04-24'
-  });
-
   const [isEdit,setIsEdit]=useState(false);
-  return (
+  const [loading, setLoading] = useState(true);
+  const [userImg,setUserImg]=useState(null);
+
+  const [userData,setUserdata]=useState(null);
+
+  const navigate=useNavigate();
+
+  const {uToken,setUToken,backendUrl,}=UseUserContext();
+
+  const handleSaveBtn=async()=>{
+    console.log(userImg);
+    try {
+
+      let formData = new FormData();
+      formData.append("name", userData.name);
+      formData.append("phone", userData.phone);
+      formData.append("dob", userData.dob);
+      formData.append("gender", userData.gender);
+      formData.append("address[line1]", userData.address.line1);
+      formData.append("address[line2]", userData.address.line2);
+      
+      if (userImg) {
+        formData.append("image", userImg);
+      }
+
+      const {data}=await axios.put(backendUrl+`/api/user/profile`,formData,{headers:{uToken:uToken}});
+      if (data.success) {
+        toast.success("Profile updated successfully!");
+        setUserdata(data.user);
+        setIsEdit(false);
+      } else {
+        toast.error(data.message || "Failed to update profile.");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error(error.message);
+    }
+  }
+
+  useEffect(()=>{
+    const getUserData=async()=>{
+      try{
+        if(!uToken){
+          toast.error("Not Token found! Please Log in again.");
+          navigate('/login');
+        }
+        else{
+          const {data}=await axios.get(backendUrl+`/api/user/profile`,{headers:{uToken:uToken}});
+          if(!data.success){
+            toast.error("User Not Found. Please Log In Again...");
+            navigate('/login');
+          }
+          else{
+            setUserdata(data.user);
+            setLoading(false);
+          }
+        }
+      }catch(err){
+        toast.error(err.message);
+      }
+    }
+    getUserData();
+  },[uToken, backendUrl,navigate]);
+
+  return loading? (<>Loding....</>): (
     <div className='max-w-lg flex flex-col gap-2 text-sm'>
+      {!isEdit?
       <img src={userData.image} className='w-36 rounded' />
+       : <div className='flex items-center gap-4 mb-8 text-gray-500'>
+          <label htmlFor="doc-img">
+          <img className='w-16 bg-gray-100 rounded-full cursor-pointer ' src={userImg? URL.createObjectURL(userImg) : assets.upload_icon} alt="" />
+          </label>
+          <input onChange={(e)=>setUserImg(e.target.files[0])} type="file" id="doc-img" hidden/>
+          <p>Uploade Docter<br/> picture</p>
+      </div>
+      }
       {
         isEdit
         ? <input className='bg-gray-100 text-3xl font-medium max-w-60 mt-4' type="text" onChange={(e)=>setUserdata(prev=>({...prev,name:e.target.value}))} value={userData.name} /> 
@@ -64,8 +129,9 @@ function MyProfile() {
               setUserdata((prev) => ({ ...prev, gender: e.target.value }))
             }
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Not Selected">Not Selected</option>
           </select>
         ) : (
           <p className='text-gray-500'>{userData.gender}</p>
@@ -87,7 +153,7 @@ function MyProfile() {
     <div className='mt-10'>
       {
         isEdit
-        ? <button className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition' onClick={() => setIsEdit(!isEdit)}>Save Information</button>
+        ? <button className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition' onClick={() =>{ setIsEdit(!isEdit); handleSaveBtn();}}>Save Information</button>
         : <button className='border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-white transition' onClick={() => setIsEdit(!isEdit)}>Edit</button>
       }
     </div>
@@ -95,4 +161,4 @@ function MyProfile() {
   )
 }
 
-export default MyProfile
+export default MyProfile;

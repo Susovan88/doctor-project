@@ -21,3 +21,14 @@
         @apply text-white bg-primary
     }
 }
+
+.Toastify__toast-icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .Toastify__toast {
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  
