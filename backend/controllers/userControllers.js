@@ -1,8 +1,8 @@
 import User from "../models/userModel.js";
+import Symptom from "../models/symptomModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {v2 as cloudinary}from "cloudinary"
-import upload from "../middlewares/multor.js";
+import {v2 as cloudinary}from "cloudinary";
 
 const userSignup= async (req, res) => {
     try {
@@ -69,7 +69,6 @@ const userLogin= async (req, res) => {
 }
 
 
-
 const sendProfileData=async(req,res)=>{
 
   res.json({
@@ -109,4 +108,64 @@ const editProfile=async(req,res)=>{
   }
 }
 
-export {userSignup,userLogin,sendProfileData,editProfile};
+
+
+const saveSymtom=async(req,res)=>{
+  try {
+    const {symptoms, oxygenLevel, heartRate ,notes} = req.body;
+
+    // Validate required fields
+    if (!oxygenLevel) {
+      return res.json({success:false, message: "Oxygen Level are required." });
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to start of the day
+
+    // Check if a symptom record already exists for today
+    const existingSymptom = await Symptom.findOne({
+      userId: req.user._id,
+      date: { $gte: today },
+    });
+
+    console.log( "is exist ",existingSymptom);
+
+    if (existingSymptom) {
+      return res.json({ success: false, message: "You have already recorded symptoms today." });
+    }
+
+    // Determine oxygen status
+    let oxygenStatus = "Risky";
+    if (oxygenLevel >= 95) oxygenStatus = "Safe";
+    else if (oxygenLevel >= 90) oxygenStatus = "Moderate";
+
+    // Create a new symptom record
+    const newSymptom = new Symptom({
+      userId:req.user._id,
+      symptoms,
+      oxygenLevel,
+      heartRate,
+      oxygenStatus,
+      notes,
+    });
+
+    // Save to database
+    await newSymptom.save();
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { symptoms: newSymptom._id } },
+      { new: true }
+    )
+    console.log("Symptoms recorded successfully!",newSymptom);
+
+
+
+    return res.json({ success:true, message: "Symptoms recorded successfully!", data: newSymptom });
+  } catch (error) {
+    // console.error("Error saving symptoms:", error);
+    return res.json({success:false, message:error.message });
+  }
+
+}
+
+export {userSignup,userLogin,sendProfileData,editProfile,saveSymtom};

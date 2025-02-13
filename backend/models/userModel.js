@@ -41,7 +41,11 @@ const userSchema=new mongoose.Schema({
     phone:{
         type:String,
         default:"+00 000000000",
-    }
+    },
+    symptoms: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Symptoms"
+    }]
 },{minimize:false});
 
 const User=mongoose.models.User || mongoose.model("User",userSchema);
