@@ -5,6 +5,7 @@ import main from "./config/mongoDB.js";
 import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/addminRoute.js";
 import userRouter from "./routes/userRoute.js";
+import reminderRouter from "./routes/medications.js";
 
 env.config();
 const app=express();
@@ -24,6 +25,9 @@ connectCloudinary(); // connect cloudinary
 app.use('/api/user',userRouter);
 
 app.use('/api/admin',adminRouter);
+
+app.use('/api/medications', reminderRouter);
+
 
 // http://localhost:8000/api/user/login
 
