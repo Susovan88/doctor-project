@@ -45,7 +45,12 @@ const userSchema=new mongoose.Schema({
     symptoms: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Symptoms"
+    }],
+    medications: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Medication"
     }]
+
 },{minimize:false});
 
 const User=mongoose.models.User || mongoose.model("User",userSchema);

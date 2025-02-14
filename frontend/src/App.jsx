@@ -13,10 +13,13 @@ import Footer from './components/Footer';
 import {ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
 import MySymptoms from './pages/MySymptoms';
+import MedicationReminder from './pages/MedicationReminder';
+import MyMedictionReminder from './pages/MyMedictionReminder';
 
 const App = () => {
   return (
     <div className='mx-4 sm:mx-[10%]'>
+      <MedicationReminder/>
       <ToastContainer 
         position="top-right"
         autoClose={3000}
@@ -36,6 +39,7 @@ const App = () => {
         <Route path='/contact' element={<Contact/>} />
         <Route path='/my-profile' element={<MyProfile/>} />
         <Route path='/my-symptoms' element={<MySymptoms/>}/>
+        <Route path='/mediction-reminder' element={<MyMedictionReminder/>}/>
         <Route path='/my-appointments' element={<MyAppointments/>} />
         <Route path='/appointment/:docId' element={<Appointment/>} />
       </Routes>

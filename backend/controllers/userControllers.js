@@ -3,6 +3,7 @@ import Symptom from "../models/symptomModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {v2 as cloudinary}from "cloudinary";
+import Medication from "../models/medicationModel.js";
 
 const userSignup= async (req, res) => {
     try {
@@ -168,4 +169,91 @@ const saveSymtom=async(req,res)=>{
 
 }
 
-export {userSignup,userLogin,sendProfileData,editProfile,saveSymtom};
+
+
+// Medication functions....
+
+const getMedication=async (req, res) => {
+  try {
+    const userId = req.user._id; // Authenticated user's ID
+
+    // Find user and populate medications
+    const user = await User.findById(userId).populate('medications');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({ success: true, message: "get Medications data.", medications: user.medications });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+const saveMedication=async (req, res) => {
+
+  const { medicationName, reminderTime } = req.body;
+  if(!medicationName || !reminderTime){
+    return res.json({success:false,message:"Medication and time required!"})
+  }
+
+  const medication = new Medication({
+    medicationName,
+    reminderTime,
+    userId:req.user._id,
+  });
+
+  try {
+    const newMedication = await medication.save();
+
+    // Update the user's medications list
+    await User.findByIdAndUpdate(req.user._id, { $push: { medications: newMedication._id } });
+
+    res.json({ success: true, message: "Saved new Medication", newMedication });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+
+const deleteMedication = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate('medications');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const medicationId = req.params.id;
+    const medication = user.medications.find(med => med._id.toString() === medicationId);
+
+    if (!medication) {
+      return res.json({ success:false, message: 'Medication not found' });
+    }
+
+    await Medication.findByIdAndDelete(medicationId);
+    await User.findByIdAndUpdate(req.user._id, { $pull: { medications: medicationId } });
+
+    res.json({success:true, message: 'Medication reminder deleted' });
+  } catch (error) {
+    res.json({success:false, message: error.message });
+  }
+};
+
+
+// const deleteMedication= async (req, res) => {
+//   try {
+//     const medication = await Medication.findById(req.user._id);
+//     if (!medication) {
+//       return res.status(404).json({ message: 'Medication not found' });
+//     }
+//     medication.isActive = false;
+//     await medication.save();
+//     await User.findByIdAndUpdate(medication.userId, { $pull: { medications: medication._id } });
+//     res.json({ message: 'Medication reminder deleted' });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// }
+
+export {userSignup,userLogin,sendProfileData,editProfile,saveSymtom,getMedication,saveMedication,deleteMedication};
