@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {v2 as cloudinary}from "cloudinary";
 import Medication from "../models/medicationModel.js";
+import Medicine from "../models/medicineModel.js"
+import Order from "../models/orderModel.js";
 
 const userSignup= async (req, res) => {
     try {
@@ -242,19 +244,75 @@ const deleteMedication = async (req, res) => {
 };
 
 
-// const deleteMedication= async (req, res) => {
-//   try {
-//     const medication = await Medication.findById(req.user._id);
-//     if (!medication) {
-//       return res.status(404).json({ message: 'Medication not found' });
-//     }
-//     medication.isActive = false;
-//     await medication.save();
-//     await User.findByIdAndUpdate(medication.userId, { $pull: { medications: medication._id } });
-//     res.json({ message: 'Medication reminder deleted' });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// }
+// get medicines for online store
+const getMedicines=async(req,res)=>{
+  try {
+    const medicines = await Medicine.find();
+    res.json({ success: true, medicines });
+  } catch (error) {
+    console.log(error.message);
+    res.json({ success: false, message: 'Server Error' });
+  }
+}
 
-export {userSignup,userLogin,sendProfileData,editProfile,saveSymtom,getMedication,saveMedication,deleteMedication};
+
+// order...
+const orderItem = async (req, res) => {
+  try {
+      const { medicineId,quantity, totalPrice } = req.body;
+
+      if (!medicineId) {
+          return res.status(400).json({ success: false, message: "No medicines provided." });
+      }
+
+      const newOrder = new Order({
+          user: req.user._id,
+          medicines:[{
+            medicineId:medicineId,
+            quantity:quantity,
+          }],
+          totalPrice,
+          address:req.user.address.line1,
+          phone:req.user.phone,
+          paymentMethod:"Cash"
+      });
+
+      await newOrder.save();
+      // console.log(newOrder);
+      res.json({ success: true, message: "Order successfully received!" });
+
+  } catch (error) {
+     console.log(error)
+      res.json({ success: false, message: error.message });
+  }
+};
+
+
+const getOrder=async (req, res) => {
+
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .populate('medicines.medicineId', 'name price')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+const deleteOrder=async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+    await order.deleteOne();
+    res.status(200).json({ success: true, message: 'Order deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error', error });
+  }
+}
+
+
+export {userSignup,userLogin,sendProfileData,editProfile,saveSymtom,getMedication,saveMedication,deleteMedication,getMedicines,orderItem,getOrder,deleteOrder};

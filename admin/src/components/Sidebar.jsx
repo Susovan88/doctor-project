@@ -26,6 +26,9 @@ function Sidebar() {
           <NavLink className={({isActive})=>`flex items-center gap-3 py-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-[#5f6FFF]' : ''}`} to={'/add-medicine'}>
             <img src={assets.people_icon} alt="" /><p>Add Medicine</p>
           </NavLink>
+          <NavLink className={({isActive})=>`flex items-center gap-3 py-3 md:px-9 md:min-w-72 cursor-pointer ${isActive ? 'bg-[#F2F3FF] border-r-4 border-[#5f6FFF]' : ''}`} to={'/all-orders'}>
+            <img src={assets.people_icon} alt="" /><p>All Orders</p>
+          </NavLink>
         </ul>
       }
     </div>

@@ -28,7 +28,7 @@ const medicineSchema = new mongoose.Schema({
     required: true,
     enum: ['Tablet', 'Syrup', 'Injection', 'Ointment', 'Other']
   },
-  expiryDate: {
+  expiry: {
     type: Date,
     required: true
   },

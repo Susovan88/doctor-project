@@ -1,5 +1,5 @@
 import express from "express";
-import {userSignup,userLogin,sendProfileData,editProfile,saveSymtom,getMedication,saveMedication,deleteMedication} from "../controllers/userControllers.js";
+import {userSignup,userLogin,sendProfileData,editProfile,saveSymtom,getMedication,saveMedication,deleteMedication,getMedicines,orderItem,getOrder,deleteOrder} from "../controllers/userControllers.js";
 import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multor.js";
 import symptomCheck from "../middlewares/symptomCheck.js";
@@ -14,6 +14,13 @@ userRouter.post("/login",userLogin);
 
 userRouter.post('/symptoms',authUser,saveSymtom);
 userRouter.get('/symptoms/check',authUser,symptomCheck);
+
+
+userRouter.get('/medicines',getMedicines)
+userRouter.post('/orders',authUser,orderItem);
+userRouter.get('/orders',authUser,getOrder);
+userRouter.delete("/orders/:id",authUser,deleteOrder);
+
 
 userRouter.get("/medications",authUser,getMedication);
 userRouter.post("/medications",authUser,saveMedication);
