@@ -11,9 +11,8 @@ function AddMedicine() {
   const [manufacturer, setManufacturer] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
-  const [category, setCategory] = useState('General');
+  const [category, setCategory] = useState('Tablet');
   const [expiry, setExpiry] = useState('');
-  const [prescriptionRequired, setPrescriptionRequired] = useState(false);
   const { backendUrl, aToken } = UseAdminContext();
 
   const handleOnSubmit = async (e) => {
@@ -29,7 +28,6 @@ function AddMedicine() {
     formData.append('stock', Number(stock));
     formData.append('category', category);
     formData.append('expiry', expiry);
-    formData.append('prescriptionRequired', prescriptionRequired);
 
     try {
       const { data } = await axios.post(`${backendUrl}/api/admin/add-medicine`, formData, { headers: { aToken } });
@@ -41,9 +39,8 @@ function AddMedicine() {
         setManufacturer('');
         setPrice('');
         setStock('');
-        setCategory('General');
+        setCategory('Tablet');
         setExpiry('');
-        setPrescriptionRequired(false);
       } else {
         toast.error(data.message);
       }
@@ -71,15 +68,12 @@ function AddMedicine() {
           <input onChange={(e) => setStock(e.target.value)} value={stock} className='border rounded px-3 py-2' type='number' placeholder='Stock' required />
           <input onChange={(e) => setExpiry(e.target.value)} value={expiry} className='border rounded px-3 py-2' type='date' required />
           <select onChange={(e) => setCategory(e.target.value)} value={category} className='border rounded px-3 py-2'>
-            <option value='General'>General</option>
-            <option value='Antibiotics'>Antibiotics</option>
-            <option value='Painkillers'>Painkillers</option>
-            <option value='Vitamins'>Vitamins</option>
+            <option value='Tablet'>Tablet</option>
+            <option value='Syrup'>Syrup</option>
+            <option value='Injection'>Injection</option>
+            <option value='Ointment'>Ointment</option>
+            <option value='Other'>Other</option>
           </select>
-          <label className='flex items-center gap-2'>
-            <input type='checkbox' checked={prescriptionRequired} onChange={(e) => setPrescriptionRequired(e.target.checked)} />
-            Prescription Required
-          </label>
           <button type='submit' className='bg-[#5f6FFF] px-10 py-3 mt-4 text-white rounded-full'>Add Medicine</button>
         </div>
       </div>

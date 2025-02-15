@@ -15,6 +15,8 @@ import "react-toastify/dist/ReactToastify.css";
 import MySymptoms from './pages/MySymptoms';
 import MedicationReminder from './pages/MedicationReminder';
 import MyMedictionReminder from './pages/MyMedictionReminder';
+import MedicineStore from './pages/MedicineStore';
+import MyOrderList from './pages/MyOrderList';
 
 const App = () => {
   return (
@@ -38,7 +40,9 @@ const App = () => {
         <Route path='/about' element={<About/>} />
         <Route path='/contact' element={<Contact/>} />
         <Route path='/my-profile' element={<MyProfile/>} />
+        <Route path='/medicine-store' element={<MedicineStore/>} />
         <Route path='/my-symptoms' element={<MySymptoms/>}/>
+        <Route path='/my-order-list' element={<MyOrderList/>}/>
         <Route path='/mediction-reminder' element={<MyMedictionReminder/>}/>
         <Route path='/my-appointments' element={<MyAppointments/>} />
         <Route path='/appointment/:docId' element={<Appointment/>} />

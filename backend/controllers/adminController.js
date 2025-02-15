@@ -3,6 +3,8 @@ import bycrypt from 'bcrypt'
 import {v2 as cloudinary}from "cloudinary"
 import Doctor from "../models/doctorModel.js";
 import jwt from "jsonwebtoken";
+import Medicine from "../models/medicineModel.js";
+import Order from "../models/orderModel.js"
 
 
 const addDoctor=async(req,res)=>{
@@ -55,6 +57,8 @@ const addDoctor=async(req,res)=>{
     }
 }
 
+
+
 //api for admin login
 const adminLogin=async(req,res)=>{
     try{
@@ -76,4 +80,74 @@ const adminLogin=async(req,res)=>{
     }
 }
 
-export {addDoctor,adminLogin};
+
+
+
+// add medicine
+
+const addMedicine = async (req, res) => {
+    try {
+      const { name, description, manufacturer, price, stock, category, expiry } = req.body;
+      const image = req.file;
+  
+      if (!name || !description || !manufacturer || !price || !stock || !category || !expiry) {
+        return res.json({ success: false, message: 'Missing details' });
+      }
+  
+      if (!req.file) {
+        return res.json({ success: false, message: 'Image file is required!' });
+      }
+  
+      const imageUpload = await cloudinary.uploader.upload(image.path, { resource_type: 'image' });
+      const imageUrl = imageUpload.secure_url;
+  
+      const medicineData = {
+        name,
+        description,
+        manufacturer,
+        price: Number(price),
+        stock: Number(stock),
+        category,
+        expiry,
+        image: imageUrl
+      };
+  
+      const newMedicine = new Medicine(medicineData);
+      await newMedicine.save();
+      console.log(newMedicine);
+  
+      res.json({ success: true, message: 'Medicine added!' });
+    } catch (err) {
+      console.log(err);
+      res.json({ success: false, message: err.message });
+    }
+};
+
+
+//all orders list
+
+const getAllOrders=async(req, res) => {
+    try {
+      const orders = await Order.find().populate('medicines.medicineId', 'name');
+      res.json({ success: true, orders });
+    } catch (error) {
+      res.json({ success: false, message: 'Failed to fetch orders', error });
+    }
+}
+
+const editOrderStatus=async (req, res) => {
+    const { status } = req.body;
+    try {
+      const order = await Order.findById(req.params.id);
+      if (!order) return res.json({ success: false, message: 'Order not found' });
+  
+      order.status = status;
+      await order.save();
+  
+      res.json({ success: true, message: 'Order status updated', order });
+    } catch (error) {
+      res.json({ success: false, message: 'Server error', error });
+    }
+}
+
+export {addDoctor,adminLogin,addMedicine,getAllOrders,editOrderStatus};
