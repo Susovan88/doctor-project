@@ -6,6 +6,10 @@ import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/addminRoute.js";
 import userRouter from "./routes/userRoute.js";
 import scheduleReminders from "./schedules/reminderScheduler.js"
+<<<<<<< HEAD
+=======
+import emergencyRouter from "./routes/emergencyRoute.js";
+>>>>>>> 0f73b4d42e5632a82a8c31680e071155c2e48962
 
 env.config();
 const app=express();
@@ -28,6 +32,11 @@ app.use('/api/user',userRouter);
 
 app.use('/api/admin',adminRouter);
 
+<<<<<<< HEAD
+=======
+app.use('/api/emergency', emergencyRouter); // hritwik
+
+>>>>>>> 0f73b4d42e5632a82a8c31680e071155c2e48962
 
 // http://localhost:8000/api/user/login
 
