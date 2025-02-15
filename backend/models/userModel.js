@@ -46,27 +46,12 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Symptoms"
     }],
-<<<<<<< HEAD
     medications: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Medication"
     }]
 
 },{minimize:false});
-=======
-    // New fields for emergency feature
-    emergencyContacts: [{
-        //name: String,
-        phone: String,
-        email: String,
-        //relationship: String
-    }],
-    lastEmergencyTrigger: {
-        type: Date,
-        default: null
-    }
-}, { minimize: false });
->>>>>>> 0f73b4d42e5632a82a8c31680e071155c2e48962
 
 // Middleware to validate emergency contacts
 userSchema.pre('save', function(next) {

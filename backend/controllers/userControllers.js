@@ -181,7 +181,6 @@ const getMedication=async (req, res) => {
     const user = await User.findById(userId).populate('medications');
 
     if (!user) {
-<<<<<<< HEAD
       return res.json({ message: 'User not found' });
     }
     
@@ -189,14 +188,6 @@ const getMedication=async (req, res) => {
   } catch (error) {
     console.log(error);
     res.json({ message: error.message });
-=======
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json({ success: true, message: "get Medications data.", medications: user.medications });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
->>>>>>> 0f73b4d42e5632a82a8c31680e071155c2e48962
   }
 }
 
@@ -231,11 +222,7 @@ const deleteMedication = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate('medications');
     if (!user) {
-<<<<<<< HEAD
       return res.json({ message: 'User not found' });
-=======
-      return res.status(404).json({ message: 'User not found' });
->>>>>>> 0f73b4d42e5632a82a8c31680e071155c2e48962
     }
 
     const medicationId = req.params.id;
