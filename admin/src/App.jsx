@@ -9,6 +9,7 @@ import DoctorList from './pages/Admin/DoctorList.jsx';
 import AddDoctor from './pages/Admin/AddDoctor.jsx';
 import Dashboard from "./pages/Admin/Dashboard.jsx";
 import AllApointment from './pages/Admin/AllApointment.jsx'
+import AddMedicine from './pages/Admin/AddMedicine.jsx';
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
           <Route path='/all-appointments' element={<AllApointment/>}/>
           <Route path='/add-doctor' element={<AddDoctor/>}/>
           <Route path='/doctor-list' element={<DoctorList/>}/>
+          <Route path='/add-medicine' element={<AddMedicine/>}/>
         </Routes>
       </div>
     </div>

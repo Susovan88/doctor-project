@@ -5,7 +5,7 @@ import main from "./config/mongoDB.js";
 import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/addminRoute.js";
 import userRouter from "./routes/userRoute.js";
-import reminderRouter from "./routes/medications.js";
+import scheduleReminders from "./schedules/reminderScheduler.js"
 
 env.config();
 const app=express();
@@ -22,11 +22,11 @@ main().then(()=>{  // connect mongodb
 
 connectCloudinary(); // connect cloudinary
 
+scheduleReminders();
+
 app.use('/api/user',userRouter);
 
 app.use('/api/admin',adminRouter);
-
-app.use('/api/medications', reminderRouter);
 
 
 // http://localhost:8000/api/user/login
