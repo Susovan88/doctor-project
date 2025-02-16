@@ -6,6 +6,8 @@ import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/addminRoute.js";
 import userRouter from "./routes/userRoute.js";
 import scheduleReminders from "./schedules/reminderScheduler.js"
+import { AQIconfig } from "./config/AQI.js";
+import AQIrouter from "./routes/aqiRoute.js";
 
 env.config();
 const app=express();
@@ -27,6 +29,8 @@ scheduleReminders();
 app.use('/api/user',userRouter);
 
 app.use('/api/admin',adminRouter);
+
+app.use('/api/aqi', AQIrouter);
 
 
 // http://localhost:8000/api/user/login
