@@ -4,6 +4,7 @@ import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multor.js";
 import symptomCheck from "../middlewares/symptomCheck.js";
 import { bookAppointment, getAppointments } from '../controllers/appointmentController.js';
+import { submitSymptoms } from "../controllers/symptomController.js";
 
 const userRouter =express.Router();
 
@@ -29,6 +30,8 @@ userRouter.delete("/medications/:id",authUser,deleteMedication);
 
 userRouter.post('/book/:doctorId', authUser, bookAppointment);
 userRouter.get('/', authUser, getAppointments);
+
+userRouter.post('/submit',submitSymptoms);
 
 
 
