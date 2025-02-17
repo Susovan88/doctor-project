@@ -47,7 +47,7 @@ function Navbar() {
                 <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>
                   <p onClick={()=> navigate('/my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
                   <p onClick={()=> navigate('/my-symptoms')} className='hover:text-black cursor-pointer'>My Symptoms</p>
-                  <p onClick={()=> navigate('/mediction-reminder')} className='hover:text-black cursor-pointer'>Mediction Reminder</p>
+                  <p onClick={()=> navigate('/mediction-reminder')} className='hover:text-black cursor-pointer'>Medication Reminder</p>
                   <p onClick={()=> navigate('/my-appointments')} className='hover:text-black cursor-pointer'>My Appointments</p>
                   <p onClick={()=> navigate('/my-order-list')} className='hover:text-black cursor-pointer'>My Order List</p>
                   <p onClick={()=>{
