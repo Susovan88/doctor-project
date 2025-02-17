@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext';
+import axios from 'axios';
 import { assets } from '../assets/assets_frontend/assets';
 import RelatedDoctors from '../components/RelatedDoctors';
+import {toast} from "react-toastify";
+import { UseUserContext } from '../context/UserContext';
+
 
 function Appointment() {
 
@@ -14,6 +18,7 @@ function Appointment() {
 
   const {docId}=useParams();
   const {doctors,currencySymbol}=useAppContext();
+  const { setUToken, uToken, backendUrl } = UseUserContext();
 
   const fetchDocInfo=async ()=>{
     const docinfo=doctors.find(doc=> doc._id===docId);
@@ -61,6 +66,42 @@ function Appointment() {
       setDocSlots((prev)=> ([...prev,timeSlots]))
     }
   }
+  
+
+  const handleBookAppointment = async (mode, paymentMode) => { 
+    if (!docSlots[slotIndex]) {
+      toast.error("No slots available for the selected index.");
+      return;
+    }
+  
+    const selectedSlot = docSlots[slotIndex].find(item => item.time === slotTime);
+    if (!selectedSlot) {
+      toast.error("No slot time selected.");
+      return;
+    }
+  
+    const time = selectedSlot.datetime;
+    console.log(time);
+  
+    try {
+      const {data} = await axios.post(backendUrl+'/api/user/book-appointment', {
+        doctorId: docId,
+        slotTime: time,
+        mode,
+        paymentMode,
+      },{headers:{uToken:uToken}});
+  
+      if (data.success) {
+        toast.success('Appointment booked successfully!');
+      }
+      else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error('Error booking appointment:');
+      toast.error('Failed to book appointment');
+    }
+  };
 
 
   useEffect(()=>{
@@ -123,12 +164,12 @@ function Appointment() {
             ))
           }
         </div>
-        <button className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6'>Book an appointment</button>
+        <button onClick={()=>{handleBookAppointment("Offline","Cash")}} className='bg-primary text-white text-sm font-light px-14 py-3 mr-6 rounded-full my-6'>Book offline appointment</button>
+        <button onClick={()=>{handleBookAppointment("Online","Online Payament")}} className='bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6'>Book online appointment</button>
       </div>
 
       {/* listing related Doctors  */}
       <RelatedDoctors docId={docId} speciality={docInfo.speciality}></RelatedDoctors>
-
     </div>
   )
 }

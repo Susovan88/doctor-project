@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/jitsi-meet": "^2.0.5",
     "axios": "^1.7.8",
     "push.js": "^1.0.12",
     "react": "^18.3.1",

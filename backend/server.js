@@ -5,7 +5,9 @@ import main from "./config/mongoDB.js";
 import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/addminRoute.js";
 import userRouter from "./routes/userRoute.js";
+import doctorRouter from "./routes/doctorRoute.js"
 import scheduleReminders from "./schedules/reminderScheduler.js"
+
 
 env.config();
 const app=express();
@@ -22,19 +24,18 @@ main().then(()=>{  // connect mongodb
 
 connectCloudinary(); // connect cloudinary
 
-scheduleReminders();
+// scheduleReminders();
 
 app.use('/api/user',userRouter);
 
 app.use('/api/admin',adminRouter);
 
-
-// http://localhost:8000/api/user/login
-
+app.use("/api/doctor",doctorRouter);
 
 app.get("/" ,(req,res)=>{
     res.send("Hello world");
 });
+
 
 app.listen(port,()=>{
     console.log(`-> ->server is connected with port ${port}`);

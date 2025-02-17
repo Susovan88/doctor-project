@@ -1,5 +1,5 @@
 import express from "express";
-import { addDoctor,adminLogin,addMedicine,getAllOrders,editOrderStatus} from "../controllers/adminController.js";
+import { addDoctor,adminLogin,addMedicine,getAllOrders,editOrderStatus,getAllAppoints} from "../controllers/adminController.js";
 import upload from "../middlewares/multor.js";
 import authAdmin from "../middlewares/authAdmin.js";
 
@@ -11,5 +11,7 @@ adminRouter.post("/login",adminLogin);
 adminRouter.post('/add-medicine', authAdmin, upload.single('image'), addMedicine);
 adminRouter.get('/orders',authAdmin,getAllOrders);
 adminRouter.put('/orders/:id',authAdmin, editOrderStatus);
+
+adminRouter.get("/all-appointments",authAdmin,getAllAppoints);
 
 export default adminRouter;

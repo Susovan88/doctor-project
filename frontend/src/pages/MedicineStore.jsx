@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from "react-toastify";
 import { UseUserContext } from '../context/UserContext';
+import {useParams,useNavigate} from 'react-router-dom'
 
 function MedicineStore() {
   const [medicines, setMedicines] = useState([]);
@@ -10,6 +11,8 @@ function MedicineStore() {
   const [quantity, setQuantity] = useState(1);
 
   const { setUToken, uToken, backendUrl } = UseUserContext();
+
+  const navigate=useNavigate();
 
   useEffect(() => {
     const getMedicines = async () => {
@@ -37,6 +40,7 @@ function MedicineStore() {
       if (data.success) {
         toast.success(data.message);
       } else {
+        navigate('/login');
         console.log(data.error);
         toast.error("Server Error.");
       }

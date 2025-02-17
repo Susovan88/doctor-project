@@ -4,7 +4,8 @@ import {v2 as cloudinary}from "cloudinary"
 import Doctor from "../models/doctorModel.js";
 import jwt from "jsonwebtoken";
 import Medicine from "../models/medicineModel.js";
-import Order from "../models/orderModel.js"
+import Order from "../models/orderModel.js";
+import Appointment from "../models/appointmentModel.js"
 
 
 const addDoctor=async(req,res)=>{
@@ -150,4 +151,18 @@ const editOrderStatus=async (req, res) => {
     }
 }
 
-export {addDoctor,adminLogin,addMedicine,getAllOrders,editOrderStatus};
+
+const getAllAppoints=async (req, res) => {
+  try {
+    const appointments = await Appointment.find()
+      .populate('doctorId', 'name speciality image')
+      .populate('patientId', 'name email');
+    res.status(200).json({ success: true, appointments });
+  } catch (error) {
+    console.error('Error fetching all appointments:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch appointments.' });
+  }
+}
+
+
+export {addDoctor,adminLogin,addMedicine,getAllOrders,editOrderStatus,getAllAppoints};

@@ -183,8 +183,10 @@ const getMedication=async (req, res) => {
     const user = await User.findById(userId).populate('medications');
 
     if (!user) {
-      return res.json({ message: 'User not found' });
+      return res.json({success: false, message: 'User not found' });
     }
+
+    console.log(user.medications);
     
     res.json({ success: true, message: "get Medications data.", medications: user.medications });
   } catch (error) {
