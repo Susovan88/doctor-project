@@ -7,6 +7,8 @@ import adminRouter from "./routes/addminRoute.js";
 import userRouter from "./routes/userRoute.js";
 import doctorRouter from "./routes/doctorRoute.js"
 import scheduleReminders from "./schedules/reminderScheduler.js"
+import { AQIconfig } from "./config/AQI.js";
+import AQIrouter from "./routes/aqiRoute.js";
 
 
 env.config();
@@ -30,7 +32,15 @@ app.use('/api/user',userRouter);
 
 app.use('/api/admin',adminRouter);
 
+<<<<<<< HEAD
 app.use("/api/doctor",doctorRouter);
+=======
+app.use('/api/aqi', AQIrouter);
+
+
+// http://localhost:8000/api/user/login
+
+>>>>>>> fce82f5d4f7135a643ceb60bf3899cd39c747e45
 
 app.get("/" ,(req,res)=>{
     res.send("Hello world");

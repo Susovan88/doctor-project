@@ -3,7 +3,12 @@ import {userSignup,userLogin,sendProfileData,editProfile,saveSymtom,getMedicatio
 import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multor.js";
 import symptomCheck from "../middlewares/symptomCheck.js";
+<<<<<<< HEAD
 import { bookAppointment, getAppointments,getDocAppointment,cancleAppointment } from '../controllers/appointmentController.js';
+=======
+import { bookAppointment, getAppointments } from '../controllers/appointmentController.js';
+import { submitSymptoms } from "../controllers/symptomController.js";
+>>>>>>> fce82f5d4f7135a643ceb60bf3899cd39c747e45
 
 const userRouter =express.Router();
 
@@ -34,6 +39,8 @@ userRouter.post('/book-appointment', authUser, bookAppointment);
 userRouter.get('/book-appointment', authUser, getAppointments);
 userRouter.delete('/book-appointment/:id', authUser, cancleAppointment);
 
+
+userRouter.post('/submit',submitSymptoms);
 
 
 
