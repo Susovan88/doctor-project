@@ -54,7 +54,7 @@ function AllOrders() {
                 order.status=="Pending" ?
                 <div className='flex justify-between items-center p-4'>
                   <button onClick={() => handleStatusChange(order._id,"Accepted")} className='text-sm font-semibold text-white bg-green-500 rounded px-2 py-1'>Accept</button>
-                  <button onClick={() => handleStatusChange(order._id,"Not Accepted")} className='py-1 px-3 bg-red-500 text-white rounded text-sm hover:bg-red-700 transition-all'>Cancle</button>
+                  <button onClick={() => handleStatusChange(order._id,"Not Accepted")} className='py-1 px-3 bg-red-500 text-white rounded text-sm hover:bg-red-700 transition-all'>Cancel</button>
                 </div>
                 : <div className='flex justify-between items-center p-4'>
                   <p className='text-green-500 text-md'>{order.status}</p>
