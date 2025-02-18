@@ -1,4 +1,7 @@
+import Symptom from "../models/symptomModel.js"
+
 const symptomCheck = async (req, res) => {
+  console.log("check call");
   try {
     const today = new Date();
     // Set the date to 00:00:00 UTC on the current day
@@ -8,8 +11,8 @@ const symptomCheck = async (req, res) => {
       userId: req.user._id,
       date: { $gte: today },
     });
-
-    console.log("is exist ", existingSymptom);
+    
+    console.log("is exist- ", existingSymptom);
 
     if (existingSymptom) {
       return res.json({ success: true, message: "You have already recorded symptoms today." });
@@ -18,6 +21,7 @@ const symptomCheck = async (req, res) => {
     return res.json({ success: false, message: "No symptoms recorded for today." });
 
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ success: false, message: error.message });
   }
 }

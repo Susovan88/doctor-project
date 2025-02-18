@@ -1,14 +1,15 @@
 
-
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { UseUserContext } from '../context/UserContext';
 import { toast } from "react-toastify";
 
 function MyAppointments() {
   const [appointments, setAppointments] = useState([]);
   const { uToken, backendUrl } = UseUserContext();
+
+  const navigate=useNavigate();
 
   const handleCancelAppointment = async (appointmentId) => {
     try {
@@ -65,7 +66,7 @@ function MyAppointments() {
             </div>
             <div></div>
             <div className='flex flex-col gap-2 justify-end'>
-              <button className='text-sm bg-primary text-white text-center sm:min-w-48 py-2 border rounded hover:text-primary hover:bg-white hover: border-primary transition-all duration-300'>Pay Online</button>
+              <button onClick={()=>navigate(`/online-meeting/${appointment.meetingDetails.meetingId}`)} className='text-sm bg-primary text-white text-center sm:min-w-48 py-2 border rounded hover:text-primary hover:bg-white hover: border-primary transition-all duration-300'>Enter Room</button>
               <button className='text-sm text-red-700 text-center sm:min-w-48 py-2 border border-red-700 rounded hover:text-white hover:bg-red-600 transition-all duration-300' onClick={() => handleCancelAppointment(appointment._id)}>Cancel Appointment</button>
             </div>
           </div>
