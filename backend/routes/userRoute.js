@@ -4,9 +4,7 @@ import authUser from "../middlewares/authUser.js";
 import upload from "../middlewares/multor.js";
 import symptomCheck from "../middlewares/symptomCheck.js";
 import { bookAppointment, getAppointments,getDocAppointment,cancleAppointment } from '../controllers/appointmentController.js';
-
-// import { bookAppointment, getAppointments } from '../controllers/appointmentController.js';
-import { submitSymptoms } from "../controllers/symptomController.js";
+import { submitSymptoms,weeklySymptomsAnalyse } from "../controllers/symptomController.js";
 
 const userRouter =express.Router();
 
@@ -20,6 +18,8 @@ userRouter.post("/login",userLogin);
 
 userRouter.post('/symptoms',authUser,saveSymtom);
 userRouter.get('/symptoms/check',authUser,symptomCheck);
+userRouter.get('/symptoms/track-weekly',authUser,weeklySymptomsAnalyse);
+
 
 
 userRouter.get('/medicines',getMedicines)
@@ -38,7 +38,7 @@ userRouter.get('/book-appointment', authUser, getAppointments);
 userRouter.delete('/book-appointment/:id', authUser, cancleAppointment);
 
 
-userRouter.post('/submit',submitSymptoms);
+userRouter.get('/analyse-symptom',authUser,submitSymptoms);
 
 
 

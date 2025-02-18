@@ -24,6 +24,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
     "twilio": "^5.4.4",
+    "uuid": "^11.0.5",
     "validator": "^13.12.0"
   }
 }

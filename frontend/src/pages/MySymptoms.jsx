@@ -2,6 +2,7 @@ import { useState ,useEffect} from "react";
 import axios from "axios";
 import {UseUserContext} from "../context/UserContext";
 import {toast} from "react-toastify";
+import TrackAllSymptoms from "../components/TrackAllSymptoms";
 
 export default function MySymptoms() {
   const [formData, setFormData] = useState({
@@ -95,7 +96,12 @@ export default function MySymptoms() {
   }, []);
 
   return alreadySubmitted ?
-   ( <p className='mb-3 text-lg font-medium'>You have already recorded your symptoms today.</p> )
+   (
+   <div>
+    {/* <p className='mb-3 text-lg font-medium'>You have already recorded your symptoms today.</p> */}
+    <TrackAllSymptoms/>
+   </div>
+  )
    :(
     <form onSubmit={handleSubmit} className='m-5 w-full'>
       <p className='mb-3 text-lg font-medium'>Symptom Tracker</p>

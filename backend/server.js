@@ -26,7 +26,7 @@ main().then(()=>{  // connect mongodb
 
 connectCloudinary(); // connect cloudinary
 
-// scheduleReminders();
+scheduleReminders();
 
 app.use('/api/user',userRouter);
 
