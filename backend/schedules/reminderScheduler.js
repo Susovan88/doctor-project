@@ -45,12 +45,32 @@ const scheduleReminders = async () => {
         console.log(`Sending reminder for medication: ${med.medicationName}`);
 
         // Send email reminder
-        const mailOptions = {
+        /*const mailOptions = {
           from: process.env.EMAIL_USER,
           to: med.userId.email,  // Assuming User model has email
           subject: 'Medication Reminder',
           text: `Hello, it's time to take your medication: ${med.medicationName}. Please take it on time!`
+        };*/
+        const mailOptions = {
+          from: process.env.EMAIL_USER,
+          to: med.userId.email,  // Assuming User model has email
+          subject: 'Medication Reminder',
+          html: `
+            <div style="font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+              <h2 style="color: #4CAF50; text-align: center; font-size: 24px;">💊 Medication Reminder</h2>
+              <p style="font-size: 18px; line-height: 1.6; color: #333;">
+                Hello <strong style="color: #2196F3;">${med.userId.name}</strong>,<br><br>
+                This is a friendly reminder that it's time to take your medication: 
+                <span style="color: #FF5722; font-weight: bold; font-size: 20px;">${med.medicationName}</span>.<br><br>
+                Please remember to take it on time for your health and well-being!<br><br>
+                <p style="font-size: 16px; color: #777;">
+                  <em>Stay healthy and take care!</em>
+                </p>
+              </p>
+            </div>
+          `
         };
+        
 
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) console.error('Error sending email:', error);
